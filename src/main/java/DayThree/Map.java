@@ -50,6 +50,19 @@ public class Map {
         return(grid[destX][destY]);
     }
 
+    public int collisionsForPattern(int dX, int dY)
+    {
+        Plot position = get(0,0);
+        int trees = 0;
+
+        while(position.y < height-1)
+        {
+            position = move(position, dX, dY);
+            trees += (position.hasTree ? 1 : 0);
+        }
+        return trees;
+    }
+
     public void print()
     {
         for(int j = 0; j < height; j++)

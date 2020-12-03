@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -21,18 +22,24 @@ public class DayThree {
         List<String> inputLines = lines.collect(Collectors.toList());
 
         Map slopeMap = new Map(inputLines);
-        slopeMap.print();
 
-        Plot position = slopeMap.get(0,0);
-        int trees = 0;
+        ArrayList<Integer> trees = new ArrayList();
 
-        while(position.y < inputLines.size()-1)
+        trees.add(slopeMap.collisionsForPattern(1, 1));
+        trees.add(slopeMap.collisionsForPattern(3, 1));
+        trees.add(slopeMap.collisionsForPattern(5, 1));
+        trees.add(slopeMap.collisionsForPattern(7, 1));
+        trees.add(slopeMap.collisionsForPattern(1, 2));
+
+        long product = 1;
+
+        for(int i : trees)
         {
-            position = slopeMap.move(position, 3, 1);
-            trees += (position.hasTree ? 1 : 0);
+            product = product * i;
         }
 
         System.out.println("Trees encountered: " + trees);
+        System.out.println("Multiplied: " + product);
 
     }
 }
