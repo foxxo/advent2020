@@ -20,14 +20,14 @@ public class Map {
 
         grid = new Plot[width][height];
 
-        for(int j = 0; j < height; j++)
+        for(int y = 0; y < height; y++)
         {
-            for(int i = 0; i < width; i++)
+            for(int x = 0; x < width; x++)
             {
-                if(input.get(j).charAt(i)=='.')
-                    grid[i][j] = new Plot(i, j, false);
-                else if(input.get(j).charAt(i)=='#')
-                    grid[i][j] = new Plot(i, j, true);
+                if(input.get(y).charAt(x)=='.')
+                    grid[x][y] = new Plot(x, y, false);
+                else if(input.get(y).charAt(x)=='#')
+                    grid[x][y] = new Plot(x, y, true);
             }
         }
     }
@@ -65,11 +65,11 @@ public class Map {
 
     public void print()
     {
-        for(int j = 0; j < height; j++)
+        for(int y = 0; y < height; y++)
         {
-            for(int i = 0; i < width; i++)
+            for(int x = 0; x < width; x++)
             {
-                if(grid[i][j].hasTree)
+                if(grid[x][y].hasTree)
                     System.out.print("#");
                 else
                     System.out.print(".");
