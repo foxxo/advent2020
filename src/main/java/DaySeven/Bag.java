@@ -34,6 +34,19 @@ public class Bag {
         return roots;
     }
 
+    List<Bag> findChildren()
+    {
+        List<Bag> descendants = new ArrayList();
+
+        for (Map.Entry<Bag, Integer> bagIntegerEntry : children.entrySet()) {
+            for (int i = 0; i < bagIntegerEntry.getValue(); i++) {
+                descendants.add(bagIntegerEntry.getKey());
+                descendants.addAll(bagIntegerEntry.getKey().findChildren());
+            }
+        }
+        return descendants;
+    }
+
     @Override
     public String toString()
     {

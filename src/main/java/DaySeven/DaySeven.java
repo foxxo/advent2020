@@ -19,8 +19,10 @@ public class DaySeven {
         extractBags(inputLines);
 
         Set<Bag> roots = findBag("shiny gold").findRoots();
+        List<Bag> desc = findBag("shiny gold").findChildren();
 
         System.out.println("All " + roots.size() + " roots of shiny gold: " + roots);
+        System.out.println("All " + desc.size() + " descendants of shiny gold: " + desc);
 
     }
 
