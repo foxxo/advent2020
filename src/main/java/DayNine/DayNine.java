@@ -14,20 +14,22 @@ public class DayNine {
 
         List<Long> inputLines = AdventUtil.readInputLines("input9").stream().map(Long::parseLong).collect(Collectors.toList());
 
-        analyzeList(inputLines, 25);
-
+        int t = analyzeList(inputLines, 25);
+        findSumRange(inputLines, t);
 
     }
 
-    private static void analyzeList(List<Long> inputLines, int preambleLength) {
-        for(; preambleLength < inputLines.size(); inputLines.remove(0))
+    private static int analyzeList(List<Long> inputLines, int preambleLength) {
+        ArrayList<Long> input = new ArrayList(inputLines);
+        for(; preambleLength < input.size(); input.remove(0))
         {
-            if(!isValid(inputLines, preambleLength))
+            if(!isValid(input, preambleLength))
             {
-                System.out.println("First invalid number: " + inputLines.get(preambleLength) + " at index " + preambleLength);
-                break;
+                System.out.println("First invalid number: " + input.get(preambleLength) + " at index " + inputLines.indexOf(input.get(preambleLength)));
+                return inputLines.indexOf(input.get(preambleLength));
             }
         }
+        return -1;
     }
 
     public static boolean isValid(List<Long> input, int preambleLength)
@@ -49,5 +51,28 @@ public class DayNine {
         return false;
     }
 
+    public static void findSumRange(List<Long> input, int targetIndex)
+    {
+        for(int i = 0; i < targetIndex; i++)
+        {
+            long sum = input.get(i);
+            int j = i + 1;
+            while(sum < input.get(targetIndex) && j < targetIndex)
+            {
+                sum += input.get(j);
+
+                if(sum == input.get(targetIndex)) {
+                    List<Long> subrange = new ArrayList(input.subList(i, j));
+                    Collections.sort(subrange);
+
+                    System.out.println("Encryption weakness: " + (subrange.get(0) + subrange.get(subrange.size()-1)));
+                    return;
+                }
+
+                j++;
+            }
+
+        }
+    }
 
 }
