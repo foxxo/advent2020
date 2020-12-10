@@ -12,7 +12,7 @@ public class DayTen {
 
     public static void main(String[] args) throws IOException {
 
-        List<Integer> inputLines = AdventUtil.readInputLines("short10").stream().map(Integer::parseInt).collect(Collectors.toList());
+        List<Integer> inputLines = AdventUtil.readInputLines("input10").stream().map(Integer::parseInt).collect(Collectors.toList());
 
         inputLines.add(0);
         Collections.sort(inputLines);
