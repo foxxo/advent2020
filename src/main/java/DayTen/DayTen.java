@@ -58,7 +58,7 @@ public class DayTen {
             currentChunk.add(intList.get(i));
             if(diff == 3)
             {
-                chunks.add(List.copyOf(currentChunk));
+                chunks.add(new ArrayList<>(currentChunk));
                 currentChunk = new ArrayList();
             }
 
