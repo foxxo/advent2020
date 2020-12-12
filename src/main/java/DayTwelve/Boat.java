@@ -84,23 +84,12 @@ public class Boat {
 
     void rotateWaypoint(int angle)
     {
-        angle /= 90;
-        Coord newWaypoint = new Coord(0,0);
-        switch(angle) {
-            case 1:
-                newWaypoint.x = waypoint.y;
-                newWaypoint.y  = -waypoint.x;
-                break;
-            case 2:
-                newWaypoint.x = -waypoint.x;
-                newWaypoint.y  = -waypoint.y;
-                break;
-            case 3:
-                newWaypoint.x = -waypoint.y;
-                newWaypoint.y  = waypoint.x;
-                break;
-        }
-        waypoint = newWaypoint;
+        double radians = Math.toRadians(angle);
+        int newX = (int) Math.round(waypoint.x*Math.cos(radians) - waypoint.y*Math.sin(-radians));
+        int newY = (int) Math.round(waypoint.x*Math.sin(-radians) + waypoint.y*Math.cos(radians));
+
+        waypoint.x = newX;
+        waypoint.y = newY;
     }
 
     void updateDirection()
