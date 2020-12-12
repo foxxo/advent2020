@@ -14,7 +14,7 @@ public class Boat {
     {
         position = new Coord(posX, posY);
         heading = h;
-        updateDirection();
+        direction = new Coord(1, 0);
     }
 
     void processOrder(NavOrder o)
@@ -53,11 +53,9 @@ public class Boat {
 
     void updateDirection()
     {
-        int dX = position.x + (int)Math.cos(heading);
-        int dY = position.y + (int)Math.sin(heading);
-
-        direction.x = dX;
-        direction.y = dY;
+        double radians = Math.toRadians(heading);
+        direction.x = (int)Math.sin(radians);
+        direction.y = (int)Math.cos(radians);;
     }
 
 }
