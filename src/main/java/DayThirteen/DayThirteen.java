@@ -4,7 +4,6 @@ import AdventUtil.AdventUtil;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,7 +11,6 @@ public class DayThirteen {
     public static void main(String[] args) throws IOException {
 
         List<String> inputLines = AdventUtil.readInputLines("input13");
-//        int currentTime = Integer.parseInt(inputLines.get(0));
 //        partOne(inputLines.get(1), currentTime);
         partTwo(inputLines.get(1));
 
@@ -53,8 +51,10 @@ public class DayThirteen {
         return true;
     }
 
-    private static void partOne(String input, int currentTime) {
+    private static void partOne(String input) {
+
         List<String> buses = Arrays.asList(input.split(",")).stream().filter(b -> !b.equals("x")).collect(Collectors.toList());
+        int currentTime = Integer.parseInt(buses.get(0));
         int startTime = currentTime;
         boolean done = false;
         do {
