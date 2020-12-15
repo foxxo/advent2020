@@ -19,7 +19,7 @@ public class DayFifteen {
 
         int turn = 0;
         int numberSpoken = -1;
-        while(turn < 2020)
+        while(turn < 30000000)
         {
             turn++;
             if(turn <= startingNumbers.size()) {
@@ -36,12 +36,10 @@ public class DayFifteen {
                         numberSpoken = numberAges.get(numberSpoken).peek() - numberAges.get(numberSpoken).get(numberAges.get(numberSpoken).size()-2);
             }
 
-            if(numberAges.containsKey(numberSpoken))
-                numberAges.get(numberSpoken).push(turn);
-            else {
+            if(!numberAges.containsKey(numberSpoken))
                 numberAges.put(numberSpoken, new Stack<>());
-                numberAges.get(numberSpoken).push(turn);
-            }
+            numberAges.get(numberSpoken).push(turn);
+
         }
 
         System.out.println("Number spoken on turn " + turn + ": " + numberSpoken);
