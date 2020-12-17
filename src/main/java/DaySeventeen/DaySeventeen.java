@@ -32,7 +32,8 @@ public class DaySeventeen {
         for (int y = 0; y < destMap.height; y++)
             for (int x = 0; x < destMap.width; x++)
                 for (int z = 0; z < destMap.depth; z++)
-                    destMap.grid[x][y][z].content = startMap.get(x, y, z).runRules();
+                    for(int w = 0; w < destMap.chrono; w++)
+                    destMap.grid[x][y][z][w].content = startMap.get(x, y, z, w).runRules();
 
         return destMap;
     }

@@ -4,26 +4,28 @@ import java.util.List;
 
 public class Map {
 
-    Cube grid[][][];
+    Cube grid[][][][];
     int width;
     int height;
     int depth;
+    int chrono;
 
     public Map(List<String> input)
     {
         parseInput(input);
     }
 
-    public Map(int w, int h, int d)
+    public Map(int wid, int h, int d, int c)
     {
-        width = w; height = h; depth = d;
-        grid = new Cube[width][height][depth];
+        width = wid; height = h; depth = d; chrono = c;
+        grid = new Cube[width][height][depth][chrono];
         for(int y = 0; y < height; y++)
         {
             for(int x = 0; x < width; x++)
             {
                 for(int z = 0; z < depth; z++)
-                    grid[x][y][z] = new Cube(x, y, z,'.', this);
+                    for(int w = 0; w < chrono; w++)
+                        grid[x][y][z][w] = new Cube(x, y, z, w,'.', this);
             }
         }
     }
@@ -33,22 +35,24 @@ public class Map {
         width = input.get(0).length();
         height = input.size();
         depth = 1;
+        chrono = 1;
 
-        grid = new Cube[width][height][depth];
+        grid = new Cube[width][height][depth][chrono];
 
         for(int y = 0; y < height; y++)
         {
             for(int x = 0; x < width; x++)
             {
                 for(int z = 0; z < depth; z++)
-                    grid[x][y][z] = new Cube(x, y, z, input.get(y).charAt(x), this);
+                    for(int w = 0; w < chrono; w++)
+                        grid[x][y][z][w] = new Cube(x, y, z, w, input.get(y).charAt(x), this);
             }
         }
     }
 
-    public Cube get(int x, int y, int z)
+    public Cube get(int x, int y, int z, int w)
     {
-        return grid[x][y][z];
+        return grid[x][y][z][w];
     }
 
     public void print()
@@ -57,8 +61,9 @@ public class Map {
         for(int z = 0; z < depth; z++) {
             System.out.println("Z-level: " + (z - depth / 2));
             for (int y = 0; y < height; y++) {
-                for (int x = 0; x < width; x++) {
-                    System.out.print(grid[x][y][z].content);
+                for (int x = 0; x < width; x++)
+                    for(int w = 0; w < chrono; w++){
+                        System.out.print(grid[x][y][z][w].content);
                 }
                 System.out.println();
             }
@@ -68,33 +73,19 @@ public class Map {
 
     public Map copy()
     {
-        Map newMap = new Map(width, height, depth);
+        Map newMap = new Map(width, height, depth, chrono);
 
         for(int y = 0; y < height; y++)
             for(int x = 0; x < width; x++)
             {
                 for(int z = 0; z < depth; z++)
-                    newMap.grid[x][y][z].content = grid[x][y][z].content;
+                    for(int w = 0; w < chrono; w++)
+                        newMap.grid[x][y][z][w].content = grid[x][y][z][w].content;
             }
 
         return newMap;
     }
 
-    public boolean isSame(Map otherMap)
-    {
-        if(width != otherMap.width || height != otherMap.height)
-            return false;
-
-        for(int y = 0; y < height; y++)
-            for(int x = 0; x < width; x++)
-            {
-                for(int z = 0; z < depth; z++)
-                    if(otherMap.grid[x][y][z].content != grid[x][y][z].content)
-                        return false;
-            }
-
-        return true;
-    }
 
     public int countActiveCubes()
     {
@@ -104,15 +95,16 @@ public class Map {
             for(int x = 0; x < width; x++)
             {
                 for(int z = 0; z < depth; z++)
-                    if(grid[x][y][z].content == '#')
-                        count++;
+                    for(int w = 0; w < chrono; w++)
+                        if(grid[x][y][z][w].content == '#')
+                            count++;
             }
         return count;
     }
 
     public Map expandBoundaries()
     {
-        Map expandedMap = new Map(width+2, height+2, depth+2);
+        Map expandedMap = new Map(width+2, height+2, depth+2, chrono+2);
         expandedMap.merge(this);
         return expandedMap;
 
@@ -124,7 +116,8 @@ public class Map {
             for(int x = 0; x < smallerMap.width; x++)
             {
                 for(int z = 0; z < smallerMap.depth; z++)
-                   grid[x+1][y+1][z+1].content = smallerMap.get(x, y, z).content;
+                    for(int w = 0; w < smallerMap.chrono; w++)
+                       grid[x+1][y+1][z+1][w+1].content = smallerMap.get(x, y, z, w).content;
             }
     }
 

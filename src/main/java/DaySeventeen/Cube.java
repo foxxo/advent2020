@@ -5,15 +5,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Cube {
-    int x,y, z;
+    int x,y, z, w;
     char content;
     Map myMap;
 
-    public Cube(int pX, int pY, int pZ, char pContent, Map pMap)
+    public Cube(int pX, int pY, int pZ, int pW, char pContent, Map pMap)
     {
         x = pX;
         y = pY;
         z = pZ;
+        w = pW;
         content = pContent;
         myMap = pMap;
     }
@@ -25,37 +26,20 @@ public class Cube {
         for(int i = -1; i < 2; i++)
             for(int j = -1; j < 2; j++)
             {
-                for(int k = -1; k < 2; k++) {
-                    if (j == 0 && i == 0  && k ==0 ||
+                for(int k = -1; k < 2; k++)
+                    for(int l = -1; l < 2; l++){
+                    if (j == 0 && i == 0  && k ==0  && l == 0||
                             x + j < 0 || x + j > myMap.width - 1 ||
                             y + i < 0 || y + i > myMap.height - 1 ||
                             z + k < 0 || z + k > myMap.depth - 1 ||
-                            neighbors.contains(myMap.get(x + j, y + i, z+k)))
+                            w + l < 0 || w + l > myMap.chrono -1 ||
+                            neighbors.contains(myMap.get(x + j, y + i, z+k, w+l)))
                         continue;
-                    neighbors.add(myMap.get(x + j, y + i, z + k));
+                    neighbors.add(myMap.get(x + j, y + i, z + k, w + l));
                 }
             }
         return neighbors;
     }
-
-//    public List<Cube> getVisibleSeats()
-//    {
-//        List<Cube> visible = new ArrayList();
-//
-//        for(int i = -1; i < 2; i++)
-//            for(int j = -1; j < 2; j++)
-//            {
-//                if(j == 0 && i == 0 ||
-//                        x + j < 0 || x + j > myMap.width-1 ||
-//                        y + i < 0 || y + i > myMap.height -1 ||
-//                        visible.contains(myMap.get(x + j, y + i)))
-//                    continue;
-//                Cube visSeat = findFirstSeatInDirection(j, i);
-//                if(visSeat != null)
-//                    visible.add(visSeat);
-//            }
-//        return visible;
-//    }
 
 
     public char runRules()
@@ -74,15 +58,4 @@ public class Cube {
         return content;
     }
 
-//    Cube findFirstSeatInDirection(int dX, int dY)
-//    {
-//        if(x + dX < 0 || x + dX >= myMap.width ||
-//                y + dY < 0 || y + dY >= myMap.height)
-//            return null;
-//        Cube nextSeat = myMap.grid[x+dX][y+dY];
-//
-//        if(nextSeat.content == 'L' || nextSeat.content == '#')
-//            return nextSeat;
-//        return nextSeat.findFirstSeatInDirection(dX, dY);
-//    }
 }
