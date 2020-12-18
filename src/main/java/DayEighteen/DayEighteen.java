@@ -1,6 +1,7 @@
 package DayEighteen;
 
 import AdventUtil.AdventUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,7 +17,7 @@ public class DayEighteen {
 
         List<String> inputLines = AdventUtil.readInputLines("test18");
 
-        String line = inputLines.get(0).replace(" ", "");
+        String line = StringUtils.reverse(inputLines.get(0).replace(" ", ""));
 
         int value = evaluate(line);
 
@@ -36,11 +37,16 @@ public class DayEighteen {
 
         switch(operator)
         {
-            case '+':
-                return evaluate(leftOperand) + evaluate(rightOperand);
-
-            case '*':
-                return evaluate(leftOperand) * evaluate(rightOperand);
+            case '+': {
+                int result = evaluate(leftOperand) + evaluate(rightOperand);
+                System.out.println(leftOperand + operator + rightOperand + "=" + result);
+                return result;
+            }
+            case '*': {
+                int result = evaluate(leftOperand) * evaluate(rightOperand);
+                System.out.println(leftOperand + operator + rightOperand + "=" + result);
+                return result;
+            }
 
         }
 
