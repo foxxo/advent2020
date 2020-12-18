@@ -4,52 +4,72 @@ import AdventUtil.AdventUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DayEighteen {
 
     static final Pattern MULT_OR_ADD = Pattern.compile("[+*]");
+    static final Pattern NUMBER = Pattern.compile("[0-9]+");
     static Matcher operationMatcher;
+    static Matcher numberMatcher;
 
     public static void main(String[] args) throws IOException {
 
         List<String> inputLines = AdventUtil.readInputLines("test18");
 
-        String line = StringUtils.reverse(inputLines.get(0).replace(" ", ""));
+        String line = inputLines.get(0).replace(" ", "");
 
         int value = evaluate(line);
 
         System.out.println("Result: " + value);
     }
 
-    public static int evaluate(String expression)
+    static int evaluate(String expression)
     {
-        if(expression.matches("^[0-9]+$"))
-            return Integer.parseInt(expression);
+        numberMatcher = NUMBER.matcher(expression);
         operationMatcher = MULT_OR_ADD.matcher(expression);
+        Queue<Integer> numbers = new LinkedList<>();
 
-        int operatorIndex = operationMatcher.find() ? operationMatcher.start() : -1;
-        char operator = expression.charAt(operatorIndex);
-        String leftOperand = expression.substring(0, operatorIndex);
-        String rightOperand = expression.substring(operatorIndex+1);
+        while (numberMatcher.find()) {
+            numbers.add(Integer.parseInt(numberMatcher.group()));
+        }
 
-        switch(operator)
+        Queue<Character> ops = new LinkedList<>();
+
+        while (operationMatcher.find()) {
+            ops.add(operationMatcher.group().charAt(0));
+        }
+        int result = numbers.poll();
+        while(!ops.isEmpty())
         {
-            case '+': {
-                int result = evaluate(leftOperand) + evaluate(rightOperand);
-                System.out.println(leftOperand + operator + rightOperand + "=" + result);
-                return result;
-            }
-            case '*': {
-                int result = evaluate(leftOperand) * evaluate(rightOperand);
-                System.out.println(leftOperand + operator + rightOperand + "=" + result);
-                return result;
-            }
+            result = eval(result,  numbers.poll(), ops.poll());
 
         }
 
-        return 0;
+        return result;
+    }
+
+    static int eval(int a, int b, char op)
+    {
+
+        int result = 0;
+        System.out.print(a + " " +  op + " " + b + " = ");
+        switch(op)
+        {
+            case '+':
+                result =  a + b;
+                break;
+            case '*':
+                result = a * b;
+                break;
+        }
+        System.out.println(result);
+        return result;
     }
 }
+
+
