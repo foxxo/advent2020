@@ -40,7 +40,7 @@ public class DayEighteen {
 
     static long evaluate(String expression)
     {
-        System.out.println("Now Evaluating " + expression);
+//        System.out.println("Now Evaluating " + expression);
         parensMatcher = PARENS.matcher(expression);
 
         while(parensMatcher.find())
@@ -50,7 +50,7 @@ public class DayEighteen {
 
             String newExp = expression.replace(interior, String.valueOf(parenResult));
             expression = newExp;
-            System.out.println("Now evaluating " + expression);
+//            System.out.println("Now evaluating " + expression);
             parensMatcher = PARENS.matcher(expression);
         }
 
@@ -58,6 +58,7 @@ public class DayEighteen {
         while(plusMatcher.find())
         {
             String interior;
+            int replaceIndex = plusMatcher.start();
             long plusResult = 0;
             if(plusMatcher.groupCount() > 0) {
                 interior = plusMatcher.group();
@@ -68,9 +69,10 @@ public class DayEighteen {
                 interior = plusMatcher.group();
                 plusResult = eval(Long.parseLong(interior.substring(0, interior.indexOf("+"))), Long.parseLong(interior.substring(interior.indexOf("+")+1)), '+');
             }
-            String newExp = expression.replace(interior, String.valueOf(plusResult));
+            String additionOutcome = String.valueOf(plusResult);
+            String newExp = expression.substring(0, replaceIndex).concat(additionOutcome).concat(expression.substring(replaceIndex+interior.length()));
             expression = newExp;
-            System.out.println("Now evaluating " + expression);
+//            System.out.println("Now evaluating " + expression);
             plusMatcher = PLUS.matcher(expression);
         }
 
@@ -102,7 +104,7 @@ public class DayEighteen {
     {
 
         long result = 0;
-        System.out.print(a + " " +  op + " " + b + " = ");
+//        System.out.print(a + " " +  op + " " + b + " = ");
         switch(op)
         {
             case '+':
