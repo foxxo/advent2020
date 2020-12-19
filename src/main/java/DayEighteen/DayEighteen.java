@@ -1,7 +1,7 @@
 package DayEighteen;
 
 import AdventUtil.AdventUtil;
-import org.apache.commons.lang3.StringUtils;
+
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -13,11 +13,13 @@ import java.util.regex.Pattern;
 public class DayEighteen {
 
     static final Pattern MULT_OR_ADD = Pattern.compile("[+*]");
+    static final Pattern PLUS = Pattern.compile("[0-9]+[+][0-9]+");
     static final Pattern NUMBER = Pattern.compile("[0-9]+");
     static final Pattern PARENS = Pattern.compile("(?=\\()(?:(?=.*?\\((?!.*?\\1)(.*\\)(?!.*\\2).*))(?=.*?\\)(?!.*?\\2)(.*)).)+?.*?(?=\\1)[^(]*(?=\\2$)");
     static Matcher operationMatcher;
     static Matcher numberMatcher;
     static Matcher parensMatcher;
+    static Matcher plusMatcher;
 
     public static void main(String[] args) throws IOException {
 
@@ -52,6 +54,25 @@ public class DayEighteen {
             parensMatcher = PARENS.matcher(expression);
         }
 
+        plusMatcher = PLUS.matcher(expression);
+        while(plusMatcher.find())
+        {
+            String interior;
+            long plusResult = 0;
+            if(plusMatcher.groupCount() > 0) {
+                interior = plusMatcher.group();
+                plusResult = evaluate(interior);
+            }
+            else
+            {
+                interior = plusMatcher.group();
+                plusResult = eval(Long.parseLong(interior.substring(0, interior.indexOf("+"))), Long.parseLong(interior.substring(interior.indexOf("+")+1)), '+');
+            }
+            String newExp = expression.replace(interior, String.valueOf(plusResult));
+            expression = newExp;
+            System.out.println("Now evaluating " + expression);
+            plusMatcher = PLUS.matcher(expression);
+        }
 
         numberMatcher = NUMBER.matcher(expression);
         operationMatcher = MULT_OR_ADD.matcher(expression);
