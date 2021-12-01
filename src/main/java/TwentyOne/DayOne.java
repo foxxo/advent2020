@@ -15,8 +15,21 @@ import java.util.stream.Stream;
 public class DayOne {
 
     public static void main(String[] args) throws IOException {
-        List<String> inputLines = AdventUtil.readInputLines("2020/input1");
+        List<String> inputLines = AdventUtil.readInputLines("2021/input1");
 
+        int increases = 0;
+        for(int i = 1; i < inputLines.size() -2; i++)
+        {
 
+            if(sumRange(inputLines, i-1) < sumRange(inputLines, i))
+                increases++;
+        }
+
+        System.out.println("Increases: " + increases);
+    }
+
+    static int sumRange(List<String> lines, int startIndex)
+    {
+        return lines.subList(startIndex, startIndex + 3).stream().map( Integer::parseInt).reduce(0, Integer::sum);
     }
 }
