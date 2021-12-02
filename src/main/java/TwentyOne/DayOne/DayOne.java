@@ -1,4 +1,4 @@
-package TwentyOne;
+package TwentyOne.DayOne;
 
 import AdventUtil.AdventUtil;
 
