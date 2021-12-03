@@ -14,19 +14,18 @@ public class DayThree {
     public static void main(String[] args) throws IOException {
         List<String> inputLines = AdventUtil.readInputLines("2021/input3");
 
-        List<Boolean> inputBits = new ArrayList();
+        List<List<Boolean>> inputBits = new ArrayList();
 
-        int bitIndex = 0;
-        int lineLen = 12;
         for(String s : inputLines)
         {
+            List<Boolean> word = new ArrayList();
+            inputBits.add(word);
             for(char c : s.toCharArray())
             {
                 if(c == '1')
-                    inputBits.add(true);
+                    word.add(true);
                 else
-                    inputBits.add(false);
-                bitIndex++;
+                    word.add(false);
             }
         }
 
@@ -56,18 +55,17 @@ public class DayThree {
         }
     }
 
-    static boolean getCommonValue(List<Boolean> bits, int column)
+    static boolean getCommonValue(List<List<Boolean>> bits, int column)
     {
-        int index = column;
         int trueCount = 0;
-        while(index < bits.size())
+
+        for(List<Boolean> word : bits)
         {
-            if(bits.get(index))
+            if(word.get(column))
                 trueCount++;
-            index += 12;
         }
 
-        return trueCount >= bits.size() / 24;
+        return trueCount >= bits.size() / 2;
     }
 
     static String toBinary(List<Boolean> bools)
