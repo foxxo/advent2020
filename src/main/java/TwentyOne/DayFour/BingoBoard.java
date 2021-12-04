@@ -5,6 +5,7 @@ import java.util.List;
 public class BingoBoard {
     int size;
     Node[][] grid;
+    public boolean done;
 
     public BingoBoard(int s) {
         this.size = s;

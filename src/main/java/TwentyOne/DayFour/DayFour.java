@@ -33,27 +33,26 @@ public class DayFour {
         int lastNumber = -1;
         for(int n : drawnNumbers)
         {
-            if(winner != null)
-                break;
+//            if(winner != null)
+//                break;
             System.out.println("Next number is " + n);
             for(BingoBoard b : boards)
             {
+                if(b.done)
+                    continue;
                 b.light(n);
                 System.out.println("Checking board \n" + b);
                 if(b.check()) {
                     System.out.println("BINGO!");
                     winner = b;
                     lastNumber = n;
-                    break;
+                    b.done = true;
+
                 }
             }
         }
         System.out.println("The winning board is\n" + winner);
         System.out.println("The final number called was " + lastNumber);
         System.out.println("Score: " + winner.sumUnlit() * lastNumber);
-
-
-
-
     }
 }
