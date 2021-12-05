@@ -18,6 +18,11 @@ public class Site {
         activity = 1;
     }
 
+    public String toString()
+    {
+        return "Site (" + x + "," + y + ")-[" + activity + "]";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
