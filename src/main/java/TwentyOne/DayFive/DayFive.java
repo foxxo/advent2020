@@ -32,7 +32,7 @@ public class DayFive {
                }
                addOrIncrement(activeSites, end);
            }
-           if(start.y == end.y)
+           else if(start.y == end.y)
            {
                int direction = Integer.signum(end.x - start.x);
                for(int i = start.x; i != end.x; i += direction)
@@ -42,6 +42,20 @@ public class DayFive {
                }
                addOrIncrement(activeSites, end);
            }
+           else
+           {
+               int xDir = Integer.signum(end.x - start.x);
+               int yDir = Integer.signum(end.y - start.y);
+               int len = Math.abs(end.y - start.y);
+               for(int i = 0; i <= len; i++)
+               {
+                   Site s = new Site(start.x + xDir * i, start.y + yDir * i);
+                   addOrIncrement(activeSites, s);
+               }
+
+           }
+
+
        }
        List<Site> multiSites = activeSites.stream().filter(it -> it.activity > 1).collect(Collectors.toList());
 //        for(Site s : multiSites)
