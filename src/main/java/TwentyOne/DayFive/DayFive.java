@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class DayFive {
 
@@ -27,17 +28,9 @@ public class DayFive {
                for(int i = start.y; i != end.y; i += direction)
                {
                    Site s = new Site(start.x, i);
-                   int foundIndex = activeSites.indexOf(s);
-                   if(foundIndex != -1) {
-                       activeSites.get(foundIndex).activity++;
-                       System.out.println("Updating " + activeSites.get(foundIndex));
-                   }
-                   else {
-                       activeSites.add(s);
-                       System.out.println("Adding " + s);
-                   }
+                   addOrIncrement(activeSites, s);
                }
-               activeSites.add(end);
+               addOrIncrement(activeSites, end);
            }
            if(start.y == end.y)
            {
@@ -45,21 +38,33 @@ public class DayFive {
                for(int i = start.x; i != end.x; i += direction)
                {
                    Site s = new Site(i, start.y);
-                   int foundIndex = activeSites.indexOf(s);
-                   if(foundIndex != -1) {
-                       activeSites.get(foundIndex).activity++;
-                       System.out.println("Updating " + activeSites.get(foundIndex));
-                   }
-                   else {
-                       activeSites.add(s);
-                       System.out.println("Adding " + s);
-                   }
+                   addOrIncrement(activeSites, s);
                }
-               activeSites.add(end);
+               addOrIncrement(activeSites, end);
            }
        }
+       List<Site> multiSites = activeSites.stream().filter(it -> it.activity > 1).collect(Collectors.toList());
+//        for(Site s : multiSites)
+//        {
+//            System.out.println(s);
+//        }
+
+        System.out.println("Multi-active sites: " + multiSites.size());
+
 
     }
 
+    static void addOrIncrement(List<Site> list, Site target)
+    {
+        int foundIndex = list.indexOf(target);
+        if(foundIndex != -1) {
+            list.get(foundIndex).activity++;
+//                       System.out.println("Updating " + activeSites.get(foundIndex));
+        }
+        else {
+            list.add(target);
+//                       System.out.println("Adding " + s);
+        }
+    }
 
 }
