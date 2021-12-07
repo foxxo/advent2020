@@ -25,7 +25,8 @@ public class DaySeven {
             int f = 0;
             for(int c : crabs)
             {
-                f += Math.abs(i - c);
+                int t = Math.abs(i - c);
+                f += Math.abs(t * (t + 1) / 2);
             }
             fuelUsages.put(i, f);
         }
