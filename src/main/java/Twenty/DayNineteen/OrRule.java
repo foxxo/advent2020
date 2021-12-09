@@ -1,4 +1,4 @@
-package DayNineteen;
+package Twenty.DayNineteen;
 
 public class OrRule extends Rule {
     public OrRule() {

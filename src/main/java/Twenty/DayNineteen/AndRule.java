@@ -1,4 +1,4 @@
-package DayNineteen;
+package Twenty.DayNineteen;
 
 public class AndRule extends Rule{
     public AndRule() {
