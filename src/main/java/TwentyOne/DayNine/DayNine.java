@@ -4,7 +4,10 @@ import AdventUtil.AdventUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static jdk.vm.ci.meta.JavaKind.Char;
 
@@ -53,7 +56,29 @@ public class DayNine {
 
         System.out.println("Risk level sum: " + riskSum);
 
+        List<List<Node>> basins = new ArrayList<>();
+
+        for(Node l : lowPoints)
+        {
+
+            List<Node> basin = l.getBasinBuddies();
+            basin.add(l);
+            int size = basin.size();
+            for(int i = 0; i < size; i++)
+            {
+                basin.addAll(basin.get(i).getBasinBuddies().stream().filter(it -> !basin.contains(it)).collect(Collectors.toList()));
+                size = basin.size();
+            }
+            basins.add(basin);
+        }
+
+        Collections.sort(basins, (Comparator<List>) (a1, a2) -> a2.size() - a1.size());
+        System.out.println("Basins: " + basins);
+
+        System.out.println("Basin size product: " + basins.subList(0,3).stream().map(it -> it.size()).reduce(1,(a,b)->a*b));
+
     }
+
 }
 
  class Node{
@@ -78,8 +103,14 @@ public class DayNine {
         if(y < grid[0].length-1)
             neighbors.add(grid[x][y+1]);
         return neighbors;
-
     }
+
+    public List<Node> getBasinBuddies()
+    {
+        return getNeighbors().stream().filter(it -> it.h != 9 && it.h > h).collect(Collectors.toList());
+    }
+
+
 
     public String toString()
     {
