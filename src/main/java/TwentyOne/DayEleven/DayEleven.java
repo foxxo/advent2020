@@ -24,21 +24,26 @@ public class DayEleven {
             }
         }
 
-        int numSteps = 100;
+        int numSteps = 0;
         int flashes = 0;
 
-        while (numSteps > 0) {
+        while (numSteps >= 0) {
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
-                    System.out.print(grid[x][y]);
+//                    System.out.print(grid[x][y]);
+                    int stepFlashes = grid[x][y].boostAndFlashIfReady();
+                    if(stepFlashes == 100) {
 
-                    flashes += grid[x][y].boostAndFlashIfReady();
+                        System.out.println("Syncronous flash at step " + (numSteps));
+                        numSteps = -2;
+                    }
+                    flashes += stepFlashes;
 
                 }
-                System.out.println();
+//                System.out.println();
             }
-            numSteps--;
-            System.out.println("Flashes after step " + (100 - numSteps) + ": " + flashes);
+            numSteps++;
+//            System.out.println("Flashes after step " + (100 - numSteps) + ": " + flashes);
 
             for (int y = 0; y < height; y++) {
                 for (int x = 0; x < width; x++) {
@@ -46,10 +51,10 @@ public class DayEleven {
                 }
             }
 
-            System.out.println("Final flash count: " + flashes);
+
 
         }
-
+//        System.out.println("Final flash count: " + flashes);
     }
 }
 
