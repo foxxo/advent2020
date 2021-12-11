@@ -1,12 +1,8 @@
 package TwentyOne.DayThree;
 
 import AdventUtil.AdventUtil;
-import TwentyOne.DayTwo.Sub;
-import com.sun.org.apache.xalan.internal.xsltc.dom.BitArray;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.BitSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
