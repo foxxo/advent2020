@@ -4,9 +4,7 @@ import AdventUtil.AdventUtil;
 import TwentyOne.DayFive.Site;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class DayTwelve {
 
@@ -36,7 +34,41 @@ public class DayTwelve {
             cave2.addPath(cave1);
         }
 
-        System.out.println(caves);
+        List<Stack<Cave>> paths = new ArrayList<>();
+        Cave start = caves.get(caves.indexOf(new Cave("start")));
+        Cave end = caves.get(caves.indexOf(new Cave("end")));
+
+        Stack<Cave> starter = new Stack<>();
+        starter.push(start);
+
+
+        getNextPathingSteps(paths, (Stack<Cave>)starter.clone(), start);
+
+
+        for(Stack<Cave> p : paths)
+            System.out.println(p);
+        System.out.println(paths.size() + " paths");
+
+    }
+
+    static void getNextPathingSteps(List<Stack<Cave>> paths, Stack<Cave> currPath, Cave currCave)
+    {
+        for(Cave c : currCave.connections)
+        {
+            if(!currPath.contains(c) || c.isBig) {
+                currPath.push(c);
+
+                if (c.name.equals("end")) {
+                    paths.add(currPath);
+                }
+                else {
+                    getNextPathingSteps(paths, (Stack<Cave>) currPath.clone(), c);
+                    currPath.pop();
+                }
+
+            }
+        }
+
     }
 }
 
@@ -50,6 +82,7 @@ class Cave
     {
         name = n;
         isBig = name.equals(name.toUpperCase());
+        connections = new ArrayList();
     }
     
     public void addPath(Cave c)
@@ -59,6 +92,7 @@ class Cave
            connections.add(c);
        }
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -70,8 +104,8 @@ class Cave
 
     public String toString()
     {
-        String conList = connections.stream().map(it -> it.name).reduce("", (a,b) -> a + ", " + b);
-        return (name + ": " + conList);
+//        String conList = connections.stream().map(it -> it.name).reduce(": ", (a,b) -> a + "-" + b);
+        return (name);
     }
 
 }
