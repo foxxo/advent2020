@@ -60,6 +60,7 @@ public class DayTwelve {
 
                 if (c.name.equals("end")) {
                     paths.add(currPath);
+                    currPath.pop();
                 }
                 else {
                     getNextPathingSteps(paths, (Stack<Cave>) currPath.clone(), c);
