@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public class DayFourteen {
@@ -15,6 +13,13 @@ public class DayFourteen {
     public static void main(String[] args) throws IOException {
         List<String> inputLines = AdventUtil.readInputLines("2021/input14");
         String polymer = inputLines.get(0);
+
+        HashMap<Character, Long> characterFrequency = new HashMap<>();
+
+        for (int i = 0; i < polymer.length(); i++) {
+            char c = polymer.charAt(i);
+            characterFrequency.merge(c, 1L, Long::sum);
+        }
 
         inputLines.remove(0);
         inputLines.remove(0);
@@ -26,38 +31,48 @@ public class DayFourteen {
             rules.add(new Rule(line));
         }
 
+        HashMap<String, Long> pairFrequencies = new HashMap<>();
+
+        for(int i = 0; i < polymer.length()-1; i++)
+        {
+            pairFrequencies.merge(polymer.substring(i, i+2), 1L, Long::sum);
+        }
+
 
         for(int i = 0; i < 40; i++) {
             System.out.println("Starting Iteration " + (i + 1) + "...");
-            List<Replacement> allReplacements = new ArrayList<>();
             Instant start = Instant.now();
 
+            List<HashMap<String, Long>> modifications = new ArrayList<>();
             for (Rule r : rules) {
-                allReplacements.addAll(r.apply(polymer));
+                HashMap<String, Long> afterRule = r.apply(pairFrequencies, characterFrequency);
+                modifications.add(afterRule);
             }
 
-            allReplacements.sort(Comparator.comparingInt(a -> a.index));
-
-            int adjustment = 0;
-            for (Replacement r : allReplacements) {
-                polymer = polymer.substring(0, r.index + adjustment) + r.newText + polymer.substring(r.index + adjustment);
-                adjustment++;
+            for(HashMap<String, Long> mod : modifications)
+            {
+                mod.forEach(
+                        (key, value) -> {
+                                if(pairFrequencies.get(key) != mod.get(key))
+                                {
+                                    pairFrequencies.merge(key, value, Long::sum);
+                                }
+                                else
+                                {
+                                    if(mod.get(key) != null)
+                                        pairFrequencies.merge(key, value, Long::sum);
+                                }
+                });
             }
+
 
             Instant stop = Instant.now();
             System.out.println("Duration: " + Duration.between(start, stop));
         }
 
-        System.out.println(polymer);
+        System.out.println(pairFrequencies);
 
-        Map<Character, Integer> map = new HashMap<>();
-
-        for (int i = 0; i < polymer.length(); i++) {
-            char c = polymer.charAt(i);
-            map.merge(c, 1, Integer::sum);
-        }
-
-       Map<Character, Integer> sortedMap = map.entrySet()
+       Map<Character, Long> sortedMap = characterFrequency.entrySet()
                .stream()
                .sorted(Comparator.comparing(Map.Entry::getValue))
                .collect(Collectors.toMap(
@@ -65,8 +80,6 @@ public class DayFourteen {
                        Map.Entry::getValue,
                        (e1, e2) -> e1, LinkedHashMap::new));
         System.out.println(sortedMap);
-
-
     }
 }
 
@@ -77,35 +90,29 @@ class Rule
 
     public Rule(String line)
     {
-        match = "(?=" + line.substring(0, 2) + ")";
+        match = line.substring(0, 2);
         insert = "" + line.charAt(6);
     }
 
-    public List<Replacement> apply(String line)
+    public HashMap<String, Long> apply(HashMap<String, Long> polymer, HashMap<Character, Long> charFreq)
     {
-        Pattern p = Pattern.compile(match);
-        Matcher m = p.matcher(line);
+        HashMap<String, Long> newMap = new HashMap<>();
 
-        List<Replacement> replacements = new ArrayList<>();
-
-        while (m.find())
+        for(Map.Entry<String, Long> entry: polymer.entrySet())
         {
-            replacements.add(new Replacement(m.start()+1, insert));
+            if(entry.getKey().equals(match)) {
+                newMap.put(entry.getKey(), 0 - entry.getValue());
+                String firstPair = match.charAt(0) + insert;
+                String secondPair = insert + match.charAt(1);
+
+                newMap.put(firstPair, newMap.getOrDefault(firstPair, 0L) + entry.getValue());
+                newMap.put(secondPair, newMap.getOrDefault(secondPair, 0L) + entry.getValue());
+                charFreq.put(insert.charAt(0), charFreq.getOrDefault(insert.charAt(0), 0L) + entry.getValue());
+
+            }
         }
 
-        return replacements;
-    }
-
-}
-
-class Replacement
-{
-    String newText;
-    int index;
-
-    public Replacement(int i, String nt)
-    {
-        index = i; newText = nt;
+        return newMap;
     }
 
 }
