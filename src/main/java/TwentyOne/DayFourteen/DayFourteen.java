@@ -3,17 +3,17 @@ package TwentyOne.DayFourteen;
 import AdventUtil.AdventUtil;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class DayFourteen {
 
     public static void main(String[] args) throws IOException {
-        List<String> inputLines = AdventUtil.readInputLines("2021/test14");
+        List<String> inputLines = AdventUtil.readInputLines("2021/input14");
         String polymer = inputLines.get(0);
 
         inputLines.remove(0);
@@ -26,24 +26,46 @@ public class DayFourteen {
             rules.add(new Rule(line));
         }
 
-        List<Replacement> allReplacements = new ArrayList<>();
 
-        for(Rule r : rules)
-        {
-            allReplacements.addAll(r.apply(polymer));
+        for(int i = 0; i < 40; i++) {
+            System.out.println("Starting Iteration " + (i + 1) + "...");
+            List<Replacement> allReplacements = new ArrayList<>();
+            Instant start = Instant.now();
+
+            for (Rule r : rules) {
+                allReplacements.addAll(r.apply(polymer));
+            }
+
+            allReplacements.sort(Comparator.comparingInt(a -> a.index));
+
+            int adjustment = 0;
+            for (Replacement r : allReplacements) {
+                polymer = polymer.substring(0, r.index + adjustment) + r.newText + polymer.substring(r.index + adjustment);
+                adjustment++;
+            }
+
+            Instant stop = Instant.now();
+            System.out.println("Duration: " + Duration.between(start, stop));
         }
-
-        allReplacements.sort(Comparator.comparingInt(a -> a.index));
-
-        int adjustment = 0;
-        for(Replacement r : allReplacements)
-        {
-            polymer = polymer.substring(0, r.index+adjustment) + r.newText + polymer.substring(r.index+adjustment);
-            adjustment++;
-        }
-
 
         System.out.println(polymer);
+
+        Map<Character, Integer> map = new HashMap<>();
+
+        for (int i = 0; i < polymer.length(); i++) {
+            char c = polymer.charAt(i);
+            map.merge(c, 1, Integer::sum);
+        }
+
+       Map<Character, Integer> sortedMap = map.entrySet()
+               .stream()
+               .sorted(Comparator.comparing(Map.Entry::getValue))
+               .collect(Collectors.toMap(
+                       Map.Entry::getKey,
+                       Map.Entry::getValue,
+                       (e1, e2) -> e1, LinkedHashMap::new));
+        System.out.println(sortedMap);
+
 
     }
 }
@@ -55,7 +77,7 @@ class Rule
 
     public Rule(String line)
     {
-        match = line.substring(0, 2);
+        match = "(?=" + line.substring(0, 2) + ")";
         insert = "" + line.charAt(6);
     }
 
