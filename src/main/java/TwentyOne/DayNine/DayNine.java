@@ -9,10 +9,12 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static jdk.vm.ci.meta.JavaKind.Char;
+
 public class DayNine {
 
     public static void main(String[] args) throws IOException {
-        List<String> inputLines = AdventUtil.readInputLines("2021/input9");
+        List<String> inputLines = AdventUtil.readInputLines("2021/test9");
 
         int height = inputLines.size();
         int width = inputLines.get(0).length();
@@ -73,7 +75,7 @@ public class DayNine {
         Collections.sort(basins, (Comparator<List>) (a1, a2) -> a2.size() - a1.size());
         System.out.println("Basins: " + basins);
 
-        System.out.println("Basin size product: " + basins.subList(0,3).stream().map(it -> it.size()).reduce(1,(a,b)->a*b));
+        System.out.println("Basin size product: " + basins.stream().map(it -> it.size()).reduce(1,(a,b)->a*b));
 
     }
 

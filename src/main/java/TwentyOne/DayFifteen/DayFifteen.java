@@ -9,10 +9,10 @@ import java.util.*;
 public class DayFifteen {
 
     public static void main(String[] args) throws IOException {
-        List<String> inputLines = AdventUtil.readInputLines("2021/test15");
+        List<String> inputLines = AdventUtil.readInputLines("2021/input15");
         int height = inputLines.size();
         int width = inputLines.get(0).length();
-        Node[][] grid = new Node[width][height];
+        Node[][] grid = new Node[width*5][height*5];
 
         for (int y = 0; y < height; y++) {
             char[] digits = inputLines.get(y).toCharArray();
@@ -22,14 +22,27 @@ public class DayFifteen {
             }
         }
 
+        height *= 5;
+        width *= 5;
+
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                grid[x][y] = new Node(x, y, grid, getRisk(grid, x, y));
+                grid[x][y].distance = Integer.MAX_VALUE;
+            }
+        }
+
+
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                System.out.print(grid[x][y].risk);
+            }
+            System.out.println();
+        }
 
         System.out.println(dijkstra(grid, grid[height-1][width-1]));
 
-//        Stack<Node> path = grid[0][0].pathTo(grid[width - 1][height - 1], new Stack<>(), 0);
-//        System.out.println(path);
-//        System.out.println(totalRisk(path));
-//
-//
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                     int l = 4;
@@ -79,6 +92,16 @@ public class DayFifteen {
             }
         }
         return target.distance;
+    }
+
+    public static int getRisk(Node[][] grid, int x, int y)
+    {
+        int xOffset = x / (grid.length/5);
+        int yOffset = y / (grid.length/5);
+        int newRisk = ((grid[x < (grid.length/5)? x : x % (grid.length/5)][y < (grid.length/5)? y : y % (grid.length/5)].risk ) + xOffset + yOffset);
+        if(newRisk > 9)
+            newRisk = newRisk % 9;
+        return newRisk > 0 ? newRisk : 1;
     }
 }
 
